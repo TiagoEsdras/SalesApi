@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Sales.Application.Repositories;
+using Sales.Infrastructure.Persistence;
 
 namespace Sales.Infrastructure.Repositories
 {
     public class Repository<T> : IRepository<T> where T : class
     {
-        private readonly DbContext _context;
+        private readonly SaleDbContext _context;
         private readonly DbSet<T> _dbSet;
 
-        public Repository(DbContext context)
+        public Repository(SaleDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<T>();
