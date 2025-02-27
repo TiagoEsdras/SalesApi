@@ -33,5 +33,13 @@ namespace SalesApi.Controllers
 
             return Ok(product);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProducts()
+        {
+            var products = await _mediator.Send(new GetProductsQuery());
+
+            return Ok(products);
+        }
     }
 }
