@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Sales.Application.Commands.Products;
 using Sales.Application.Queries.Products;
+using SalesApi.Converters;
 
 namespace SalesApi.Controllers
 {
@@ -10,36 +11,33 @@ namespace SalesApi.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator _mediator;
+        private readonly IActionResultConverter _actionResultConverter;
 
-        public ProductsController(IMediator mediator)
+        public ProductsController(IMediator mediator, IActionResultConverter actionResultConverter)
         {
             _mediator = mediator;
+            _actionResultConverter = actionResultConverter;
         }
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromBody] CreateProductCommand request)
         {
-            var productId = await _mediator.Send(request);
-            return CreatedAtAction(nameof(GetProductById), new { id = productId }, null);
+            var result = await _mediator.Send(request);
+            return _actionResultConverter.Convert(result);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetProductById(Guid id)
         {
-            var product = await _mediator.Send(new GetProductByIdQuery(id));
-
-            if (product is null)
-                return NotFound();
-
-            return Ok(product);
+            var result = await _mediator.Send(new GetProductByIdQuery(id));
+            return _actionResultConverter.Convert(result);
         }
 
         [HttpGet]
         public async Task<IActionResult> GetProducts()
         {
-            var products = await _mediator.Send(new GetProductsQuery());
-
-            return Ok(products);
+            var result = await _mediator.Send(new GetProductsQuery());
+            return _actionResultConverter.Convert(result);
         }
     }
 }

@@ -3,6 +3,7 @@ using Sales.Application.Handlers.Products;
 using Sales.Application.Repositories;
 using Sales.Infrastructure.Persistence;
 using Sales.Infrastructure.Repositories;
+using SalesApi.Converters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+
+builder.Services.AddScoped<IActionResultConverter, ActionResultConverter>();
 
 var app = builder.Build();
 
