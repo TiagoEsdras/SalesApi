@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Sales.Application.Handlers.Products;
 using Sales.Application.Interfaces.Repositories;
+using Sales.Application.Interfaces.Services;
+using Sales.Application.Services;
 using Sales.Infrastructure.Persistence;
 using Sales.Infrastructure.Repositories;
 using SalesApi.Converters;
@@ -23,6 +25,8 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 builder.Services.AddScoped<IActionResultConverter, ActionResultConverter>();
+
+builder.Services.AddScoped<IDiscountCalculatorService, DiscountCalculatorService>();
 
 var app = builder.Build();
 
