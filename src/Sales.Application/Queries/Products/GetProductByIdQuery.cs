@@ -1,10 +1,10 @@
 ﻿using MediatR;
+using Sales.Application.DTOs;
 using Sales.Application.Shared;
-using Sales.Domain.Entities;
 
 namespace Sales.Application.Queries.Products
 {
-    public class GetProductByIdQuery : IRequest<Result<Product>>
+    public class GetProductByIdQuery : IRequest<Result<ProductDto>>
     {
         public Guid Id { get; set; }
 

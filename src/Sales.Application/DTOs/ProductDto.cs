@@ -1,11 +1,8 @@
-﻿using MediatR;
-using Sales.Application.DTOs;
-using Sales.Application.Shared;
-
-namespace Sales.Application.Commands.Products
+﻿namespace Sales.Application.DTOs
 {
-    public class CreateProductCommand : IRequest<Result<ProductDto>>
+    public class ProductDto
     {
+        public Guid Id { get; set; }
         public string Title { get; set; }
         public decimal Price { get; set; }
         public string Description { get; set; }

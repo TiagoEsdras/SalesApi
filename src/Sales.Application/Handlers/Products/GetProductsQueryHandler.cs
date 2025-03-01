@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
+using Sales.Application.DTOs;
 using Sales.Application.Queries.Products;
 using Sales.Application.Repositories;
 using Sales.Application.Shared;
@@ -6,19 +8,22 @@ using Sales.Domain.Entities;
 
 namespace Sales.Application.Handlers.Products
 {
-    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Result<IEnumerable<Product>>>
+    public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Result<IEnumerable<ProductDto>>>
     {
         private readonly IRepository<Product> _productRepository;
+        private readonly IMapper _mapper;
 
-        public GetProductsQueryHandler(IRepository<Product> productRepository)
+        public GetProductsQueryHandler(IRepository<Product> productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
+            _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<Product>>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<ProductDto>>> Handle(GetProductsQuery request, CancellationToken cancellationToken)
         {
             var products = await _productRepository.GetAllAsync();
-            return Result<IEnumerable<Product>>.Success(products, string.Format(Consts.GetEntitiesWithSuccess, nameof(Product)));
+            var productsDto = _mapper.Map<IEnumerable<ProductDto>>(products);
+            return Result<IEnumerable<ProductDto>>.Success(productsDto, string.Format(Consts.GetEntitiesWithSuccess, nameof(Product)));
         }
     }
 }
