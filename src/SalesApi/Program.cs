@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Sales.Application.Handlers.Products;
-using Sales.Application.Repositories;
+using Sales.Application.Interfaces.Repositories;
 using Sales.Infrastructure.Persistence;
 using Sales.Infrastructure.Repositories;
 using SalesApi.Converters;

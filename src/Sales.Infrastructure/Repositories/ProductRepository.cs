@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sales.Application.Repositories;
+using Sales.Application.Interfaces.Repositories;
 using Sales.Domain.Entities;
 using Sales.Infrastructure.Persistence;
 

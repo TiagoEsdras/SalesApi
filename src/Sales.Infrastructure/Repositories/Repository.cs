@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Sales.Application.Repositories;
+using Sales.Application.Interfaces.Repositories;
 using Sales.Infrastructure.Persistence;
 
 namespace Sales.Infrastructure.Repositories

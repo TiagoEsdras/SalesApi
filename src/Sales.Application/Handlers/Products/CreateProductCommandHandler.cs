@@ -2,7 +2,7 @@
 using MediatR;
 using Sales.Application.Commands.Products;
 using Sales.Application.DTOs;
-using Sales.Application.Repositories;
+using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Domain.Entities;
 

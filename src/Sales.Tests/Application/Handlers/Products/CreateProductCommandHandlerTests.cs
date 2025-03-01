@@ -3,7 +3,7 @@ using FluentAssertions;
 using Moq;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
-using Sales.Application.Repositories;
+using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
 using Sales.Domain.Entities;

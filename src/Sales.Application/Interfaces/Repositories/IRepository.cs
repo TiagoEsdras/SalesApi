@@ -1,4 +1,4 @@
-﻿namespace Sales.Application.Repositories
+﻿namespace Sales.Application.Interfaces.Repositories
 {
     public interface IRepository<T> where T : class
     {

@@ -1,6 +1,6 @@
 ﻿using Sales.Domain.Entities;
 
-namespace Sales.Application.Repositories
+namespace Sales.Application.Interfaces.Repositories
 {
     public interface IProductRepository : IRepository<Product>
     {
