@@ -10,5 +10,41 @@ namespace Sales.Infrastructure.Persistence
         }
 
         public DbSet<Product> Products { get; set; }
+        public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleItem> SaleItems { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            #region Primary Keys
+
+            modelBuilder.Entity<Product>()
+               .HasKey(s => s.Id);
+
+            modelBuilder.Entity<Sale>()
+                .HasKey(s => s.Id);
+
+            modelBuilder.Entity<SaleItem>()
+                .HasKey(si => si.Id);
+
+            #endregion Primary Keys
+
+            #region Relationships
+
+            modelBuilder.Entity<Sale>()
+                .HasMany(s => s.Items)
+                .WithOne()
+                .HasForeignKey(si => si.SaleId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<SaleItem>()
+                .HasOne<Product>()
+                .WithMany()
+                .HasForeignKey(si => si.ProductId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            #endregion Relationships
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }
