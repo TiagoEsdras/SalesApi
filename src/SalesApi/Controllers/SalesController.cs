@@ -46,5 +46,14 @@ namespace SalesApi.Controllers
             var result = await _mediator.Send(new GetSalesQuery());
             return _actionResultConverter.Convert(result);
         }
+
+        [HttpDelete("{id}")]
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<bool>), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> CancelSale(Guid id)
+        {
+            var result = await _mediator.Send(new CancelSaleByIdQuery(id));
+            return _actionResultConverter.Convert(result);
+        }
     }
 }

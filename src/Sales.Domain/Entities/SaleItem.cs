@@ -28,5 +28,12 @@
 
             return UnitPrice * Quantity * (percentageDiscount / 100);
         }
+
+        public void Cancel()
+        {
+            if (IsCanceled)
+                throw new InvalidOperationException("Sale item is already canceled.");
+            IsCanceled = true;
+        }
     }
 }

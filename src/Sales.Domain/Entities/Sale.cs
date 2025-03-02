@@ -12,5 +12,15 @@
         public IEnumerable<SaleItem> Items { get; private set; }
 
         private decimal GetTotalAmount() => Items.Sum(i => i.Total - i.Discount);
+
+        public void Cancel()
+        {
+            if (IsCanceled)
+                throw new InvalidOperationException("Sale is already canceled.");
+            IsCanceled = true;
+
+            foreach (var item in Items)
+                item.Cancel();
+        }
     }
 }

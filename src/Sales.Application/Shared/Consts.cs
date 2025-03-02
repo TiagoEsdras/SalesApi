@@ -7,6 +7,6 @@
         public const string GetEntitiesWithSuccess = "Getting {0}s with success";
         public const string NotFoundEntity = "{0} not found";
         public const string NotFoundEntityById = "{0} with Id {1} was not found";
-
+        public const string SaleCanceledWithSuccess = "Sale with Id {0} was canceled with success";
     }
 }
