@@ -61,7 +61,7 @@ namespace Sales.Tests.Application.Handlers.Products
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnNull_WhenValidationFails()
+        public async Task Handle_ShouldThrowException_WhenValidationFails()
         {
             var command = new CreateProductCommandBuilder()
                .WithTitle("")
