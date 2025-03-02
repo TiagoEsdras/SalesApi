@@ -10,6 +10,7 @@ using Sales.Application.Shared.Enum;
 using Sales.Domain.Entities;
 using Sales.Tests.Builders.DTOs;
 using Xunit;
+using FluentValidation;
 
 namespace Sales.Tests.Application.Handlers.Products
 {
@@ -18,12 +19,14 @@ namespace Sales.Tests.Application.Handlers.Products
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly GetProductByIdQueryHandler _handler;
+        private readonly Mock<IValidator<GetProductByIdQuery>> _validator;
 
         public GetProductByIdQueryHandlerTests()
         {
             _mockProductRepository = new Mock<IProductRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new GetProductByIdQueryHandler(_mockProductRepository.Object, _mockMapper.Object);
+            _validator = new Mock<IValidator<GetProductByIdQuery>>();
+            _handler = new GetProductByIdQueryHandler(_mockProductRepository.Object, _mockMapper.Object, _validator.Object);
         }
 
         [Fact]
