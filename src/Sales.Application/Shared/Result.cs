@@ -6,7 +6,7 @@ namespace Sales.Application.Shared
     {
         public T? Data { get; private set; }
         public string? Message { get; private set; }
-        public ErrorType? ErrorType { get; private set; } // ToDo Enum?
+        public ErrorType? ErrorType { get; private set; }
         public string? ErrorMessage { get; private set; }
         public string? ErrorDetail { get; private set; }
         public ResultResponseKind Status { get; private set; }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Sales.Application.Commands.Products;
 using Sales.Application.DTOs;
@@ -12,15 +13,18 @@ namespace Sales.Application.Handlers.Products
     {
         private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
+        private readonly IValidator<CreateProductCommand> _validator;
 
-        public CreateProductCommandHandler(IProductRepository productRepository, IMapper mapper)
+        public CreateProductCommandHandler(IProductRepository productRepository, IMapper mapper, IValidator<CreateProductCommand> validator)
         {
             _productRepository = productRepository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<Result<ProductDto>> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
+            await _validator.ValidateAndThrowAsync(request, cancellationToken);
             var product = _mapper.Map<Product>(request);
             await _productRepository.AddAsync(product);
             var productDto = _mapper.Map<ProductDto>(product);

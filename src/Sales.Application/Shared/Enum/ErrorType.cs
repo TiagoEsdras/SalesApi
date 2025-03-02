@@ -4,5 +4,6 @@
     {
         UnknownError,
         DataNotFound,
+        InvalidData
     }
 }
