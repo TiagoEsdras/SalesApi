@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Queries.Sales;
@@ -12,15 +13,18 @@ namespace Sales.Application.Handlers.Sales
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
+        private readonly IValidator<CancelSaleByIdQuery> _validator;
 
-        public CancelSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper)
+        public CancelSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper, IValidator<CancelSaleByIdQuery> validator)
         {
             _saleRepository = saleRepository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<Result<bool>> Handle(CancelSaleByIdQuery request, CancellationToken cancellationToken)
         {
+            await _validator.ValidateAndThrowAsync(request, cancellationToken);
             var sale = await _saleRepository.GetByIdAsync(request.Id);
 
             if (sale is null)

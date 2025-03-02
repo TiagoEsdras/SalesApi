@@ -4,7 +4,7 @@ using Sales.Application.Shared;
 
 namespace Sales.Application.Queries.Products
 {
-    public class GetProductByIdQuery : IRequest<Result<ProductDto>>
+    public class GetProductByIdQuery : IRequest<Result<ProductDto>>, IQueryById
     {
         public Guid Id { get; set; }
 

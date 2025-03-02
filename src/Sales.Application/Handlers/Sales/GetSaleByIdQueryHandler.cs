@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Sales.Application.DTOs;
 using Sales.Application.Interfaces.Repositories;
@@ -13,15 +14,18 @@ namespace Sales.Application.Handlers.Sales
     {
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
+        private readonly IValidator<GetSaleByIdQuery> _validator;
 
-        public GetSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper)
+        public GetSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper, IValidator<GetSaleByIdQuery> validator)
         {
             _saleRepository = saleRepository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         public async Task<Result<SaleDto>> Handle(GetSaleByIdQuery request, CancellationToken cancellationToken)
         {
+            await _validator.ValidateAndThrowAsync(request, cancellationToken);
             var sale = await _saleRepository.GetByIdAsync(request.Id);
 
             if (sale is null)

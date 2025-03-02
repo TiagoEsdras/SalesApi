@@ -20,6 +20,7 @@
         public const string FieldMustBeGreaterThan = "Field {0} must be greater than {1}";
         public const string FieldMustBeLowerOrEqualTo = "Field {0} must be lower or equal to {1}";
         public const string DuplicatedProductIds = "The following ProductId(s) is/are duplicated: {0}";
+        public const string GuidCannotBeEmptyGuid = "Field {0} cannot be empty guid";
 
         #endregion Validations Messages
     }

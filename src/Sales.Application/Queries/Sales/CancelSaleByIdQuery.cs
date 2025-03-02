@@ -3,7 +3,7 @@ using Sales.Application.Shared;
 
 namespace Sales.Application.Queries.Sales
 {
-    public class CancelSaleByIdQuery : IRequest<Result<bool>>
+    public class CancelSaleByIdQuery : IRequest<Result<bool>>, IQueryById
     {
         public Guid Id { get; set; }
 
