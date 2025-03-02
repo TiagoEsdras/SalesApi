@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿#nullable disable warnings
+
+using MediatR;
 using Sales.Application.DTOs;
 using Sales.Application.Shared;
 

@@ -18,6 +18,8 @@
         public const string FieldContainInvalidValue = "Field(s) {0} contain(s) invalid value(s)";
         public const string FieldCannotBeNullOrEmpty = "Field {0} cannot be null or empty";
         public const string FieldMustBeGreaterThan = "Field {0} must be greater than {1}";
+        public const string FieldMustBeLowerOrEqualTo = "Field {0} must be lower or equal to {1}";
+        public const string DuplicatedProductIds = "The following ProductId(s) is/are duplicated: {0}";
 
         #endregion Validations Messages
     }

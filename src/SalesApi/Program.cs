@@ -1,11 +1,13 @@
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Sales.Application.Commands.Products;
+using Sales.Application.Commands.Sales;
 using Sales.Application.Handlers.Products;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Interfaces.Services;
 using Sales.Application.Services;
 using Sales.Application.Validators.Products;
+using Sales.Application.Validators.Sales;
 using Sales.Infrastructure.Persistence;
 using Sales.Infrastructure.Repositories;
 using SalesApi.Converters;
@@ -43,6 +45,8 @@ builder.Services.AddScoped<IActionResultConverter, ActionResultConverter>();
 builder.Services.AddScoped<IDiscountCalculatorService, DiscountCalculatorService>();
 
 builder.Services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateSaleCommand>, CreateSaleCommandValidator>();
+builder.Services.AddScoped<IValidator<SaleItemCommand>, SaleItemCommandValidator>();
 
 builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
 builder.Services.AddProblemDetails();
