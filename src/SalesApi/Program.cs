@@ -1,17 +1,7 @@
-using FluentValidation;
 using Microsoft.EntityFrameworkCore;
-using Sales.Application.Commands.Products;
-using Sales.Application.Commands.Sales;
 using Sales.Application.Handlers.Products;
-using Sales.Application.Interfaces.Repositories;
-using Sales.Application.Interfaces.Services;
-using Sales.Application.Services;
-using Sales.Application.Validators.Products;
-using Sales.Application.Validators.Sales;
 using Sales.Infrastructure.Persistence;
-using Sales.Infrastructure.Repositories;
-using SalesApi.Converters;
-using SalesApi.ExceptionsHandler;
+using SalesApi.Configurations;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,28 +17,14 @@ builder.Services.AddControllers(options =>
     });
 
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddDbContext<SaleDbContext>(opt => opt.UseInMemoryDatabase("SaleDb"));
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(CreateProductCommandHandler).Assembly));
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ISaleRepository, SaleRepository>();
-
-builder.Services.AddScoped<IActionResultConverter, ActionResultConverter>();
-
-builder.Services.AddScoped<IDiscountCalculatorService, DiscountCalculatorService>();
-
-builder.Services.AddScoped<IValidator<CreateProductCommand>, CreateProductCommandValidator>();
-builder.Services.AddScoped<IValidator<CreateSaleCommand>, CreateSaleCommandValidator>();
-builder.Services.AddScoped<IValidator<SaleItemCommand>, SaleItemCommandValidator>();
-
-builder.Services.AddExceptionHandler<ValidationExceptionHandler>();
+builder.Services.AddConverters();
+builder.Services.AddRepositories();
+builder.Services.AddValidators();
+builder.Services.AddExceptions();
 builder.Services.AddProblemDetails();
 
 var app = builder.Build();
