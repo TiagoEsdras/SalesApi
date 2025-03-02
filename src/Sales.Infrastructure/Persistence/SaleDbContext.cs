@@ -44,6 +44,14 @@ namespace Sales.Infrastructure.Persistence
 
             #endregion Relationships
 
+            #region Includes
+
+            modelBuilder.Entity<Sale>()
+                .Navigation(s => s.Items)
+                .AutoInclude();
+
+            #endregion Includes
+
             base.OnModelCreating(modelBuilder);
         }
     }

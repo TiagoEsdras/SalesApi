@@ -31,11 +31,19 @@ namespace SalesApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Result<ProductDto>), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(Result<ProductDto>), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(Result<SaleDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(Result<SaleDto>), StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetSaleById(Guid id)
         {
             var result = await _mediator.Send(new GetSaleByIdQuery(id));
+            return _actionResultConverter.Convert(result);
+        }
+
+        [HttpGet]
+        [ProducesResponseType(typeof(Result<IEnumerable<SaleDto>>), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetSales()
+        {
+            var result = await _mediator.Send(new GetSalesQuery());
             return _actionResultConverter.Convert(result);
         }
     }
