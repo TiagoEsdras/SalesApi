@@ -11,10 +11,10 @@ namespace Sales.Application.Handlers.Products
 {
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, Result<ProductDto>>
     {
-        private readonly IRepository<Product> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public GetProductByIdQueryHandler(IRepository<Product> productRepository, IMapper mapper)
+        public GetProductByIdQueryHandler(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;

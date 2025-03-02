@@ -10,10 +10,10 @@ namespace Sales.Application.Handlers.Products
 {
     public class GetProductsQueryHandler : IRequestHandler<GetProductsQuery, Result<IEnumerable<ProductDto>>>
     {
-        private readonly IRepository<Product> _productRepository;
+        private readonly IProductRepository _productRepository;
         private readonly IMapper _mapper;
 
-        public GetProductsQueryHandler(IRepository<Product> productRepository, IMapper mapper)
+        public GetProductsQueryHandler(IProductRepository productRepository, IMapper mapper)
         {
             _productRepository = productRepository;
             _mapper = mapper;
