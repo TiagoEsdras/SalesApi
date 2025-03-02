@@ -1,11 +1,16 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
+using FluentValidation.Results;
+using FluentValidation.TestHelper;
 using Moq;
+using Sales.Application.Commands.Products;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
+using Sales.Application.Validators.Products;
 using Sales.Domain.Entities;
 using Sales.Tests.Builders.Commands;
 using Sales.Tests.Builders.DTOs;
@@ -17,13 +22,15 @@ namespace Sales.Tests.Application.Handlers.Products
     {
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly Mock<IMapper> _mockMapper;
+        private readonly CreateProductCommandValidator _validator;
         private readonly CreateProductCommandHandler _handler;
 
         public CreateProductCommandHandlerTests()
         {
             _mockProductRepository = new Mock<IProductRepository>();
             _mockMapper = new Mock<IMapper>();
-            _handler = new CreateProductCommandHandler(_mockProductRepository.Object, _mockMapper.Object);
+            _validator = new CreateProductCommandValidator();
+            _handler = new CreateProductCommandHandler(_mockProductRepository.Object, _mockMapper.Object, _validator);
         }
 
         [Fact]
@@ -54,6 +61,21 @@ namespace Sales.Tests.Application.Handlers.Products
             result.Data.Should().BeEquivalentTo(productDto);
             result.Message.Should().Be(string.Format(Consts.EntityCreatedWithSuccess, nameof(Product)));
             _mockProductRepository.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Once);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldReturnNull_WhenValidationFails()
+        {
+            var command = new CreateProductCommandBuilder()
+               .WithTitle("")
+               .Build();
+
+            // Act
+            Func<Task> act = () => _handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<ValidationException>();
+            _mockProductRepository.Verify(r => r.AddAsync(It.IsAny<Product>()), Times.Never);
         }
     }
 }

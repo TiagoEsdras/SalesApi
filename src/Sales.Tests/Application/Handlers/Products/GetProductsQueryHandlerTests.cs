@@ -15,13 +15,13 @@ namespace Sales.Tests.Application.Handlers.Products
 {
     public class GetProductsQueryHandlerTests
     {
-        private readonly Mock<IRepository<Product>> _mockProductRepository;
+        private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly GetProductsQueryHandler _handler;
 
         public GetProductsQueryHandlerTests()
         {
-            _mockProductRepository = new Mock<IRepository<Product>>();
+            _mockProductRepository = new Mock<IProductRepository>();
             _mockMapper = new Mock<IMapper>();
             _handler = new GetProductsQueryHandler(_mockProductRepository.Object, _mockMapper.Object);
         }
