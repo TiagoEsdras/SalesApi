@@ -32,16 +32,15 @@ namespace Sales.Application.Validators.Sales
             {
                 RuleFor(t => t).Custom((request, ctx) =>
                 {
-                    var duplicateProductIds = request.Items
-                        ?.GroupBy(i => i.ProductId)
+                    var duplicateProductIds = request.Items!
+                        .GroupBy(i => i.ProductId)
                         .Where(g => g.Count() > 1)
                         .Select(g => g.Key)
                         .ToList();
 
-                    if (duplicateProductIds != null && duplicateProductIds.Count != 0)
+                    if (duplicateProductIds.Count != 0)
                     {
-                        var duplicatedIds = string.Join(", ", duplicateProductIds);
-                        ctx.AddFailure(nameof(request.Items), string.Format(Consts.DuplicatedProductIds, duplicatedIds));
+                        ctx.AddFailure(nameof(request.Items), string.Format(Consts.DuplicatedProductIds, string.Join(", ", duplicateProductIds)));
                     }
                 });
 
