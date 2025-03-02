@@ -1,10 +1,7 @@
 ﻿using AutoMapper;
 using FluentAssertions;
 using FluentValidation;
-using FluentValidation.Results;
-using FluentValidation.TestHelper;
 using Moq;
-using Sales.Application.Commands.Products;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
 using Sales.Application.Interfaces.Repositories;
