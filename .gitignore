@@ -277,3 +277,5 @@ Thumbs.db
 #####
 # End of core ignore list, below put you custom 'per project' settings (patterns or path)
 #####
+/src/Gateway/Properties/launchSettings.Local.json
+/src/Gateway/ocelot.Local.json
