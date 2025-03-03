@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
+using FluentValidation;
 using MediatR;
 using Sales.Application.DTOs;
-using Sales.Application.Queries.Products;
 using Sales.Application.Interfaces.Repositories;
+using Sales.Application.Queries.Products;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
 using Sales.Domain.Entities;
-using FluentValidation;
 
 namespace Sales.Application.Handlers.Products
 {
