@@ -1,33 +1,42 @@
-﻿namespace Sales.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Sales.Domain.Entities
 {
+    [Table("sale_items")]
     public class SaleItem
     {
+        [Column("id")]
+        [Key]
         public Guid Id { get; private set; }
+
+        [Column("product_id")]
+        [Required]
         public Guid ProductId { get; private set; }
+
+        [Column("quantity")]
+        [Required]
         public int Quantity { get; private set; }
+
+        [Column("unit_price")]
+        [Required]
         public decimal UnitPrice { get; private set; }
-        public decimal Discount { get => CalculateDiscount(); }
+
+        [Column("discount")]
+        [Required]
+        public decimal Discount { get; private set; }
+
+        [Column("total")]
+        [Required]
         public decimal Total { get; private set; }
+
+        [Column("sale_id")]
+        [Required]
         public Guid SaleId { get; private set; }
+
+        [ForeignKey("is_canceled")]
+        [Required]
         public bool IsCanceled { get; private set; }
-
-        private decimal CalculateDiscount()
-        {
-            if (Quantity <= 0 || Quantity > 20)
-                throw new InvalidOperationException("Unable to calculate discount for the provided quantity.");
-
-            decimal percentageDiscount = 0;
-
-            if (Quantity < 4)
-                return 0;
-
-            if (Quantity < 10)
-                percentageDiscount = 10;
-            else if (Quantity <= 20)
-                percentageDiscount = 20;
-
-            return UnitPrice * Quantity * (percentageDiscount / 100);
-        }
 
         public void Cancel()
         {

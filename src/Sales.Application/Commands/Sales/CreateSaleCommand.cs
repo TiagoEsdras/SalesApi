@@ -13,5 +13,7 @@ namespace Sales.Application.Commands.Sales
         public Guid CustomerId { get; set; }
         public Guid BranchId { get; set; }
         public IEnumerable<SaleItemCommand> Items { get; set; }
+
+        public decimal GetTotalAmount() => Items.Sum(i => i.TotalPrice - i.Discount);
     }
 }
