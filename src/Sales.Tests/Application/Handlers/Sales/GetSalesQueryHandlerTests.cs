@@ -27,31 +27,12 @@ namespace Sales.Tests.Application.Handlers.Sales
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnSuccess_WhenSalesListIsEmpty()
-        {
-            // Arrange
-            var query = new GetSalesQuery();
-
-            _saleRepositoryMock.Setup(x => x.GetAllAsync())
-                .ReturnsAsync([]);
-
-            _mapperMock.Setup(x => x.Map<IEnumerable<SaleDto>>(It.IsAny<IEnumerable<Sale>>()))
-                .Returns([]);
-
-            // Act
-            var result = await _handler.Handle(query, CancellationToken.None);
-
-            // Assert
-            result.Data.Should().BeEmpty();
-            result.Status.Should().Be(ResultResponseKind.Success);
-            result.Message.Should().Be(string.Format(Consts.GetEntitiesWithSuccess, nameof(Sale)));
-        }
-
-        [Fact]
-        public async Task Handle_ShouldReturnSuccess_WhenSalesListHasData()
+        public async Task Handle_ShouldReturnSuccess_WhenSalesAreFound()
         {
             // Arrange
             var salesDto = new List<SaleDto> {
+                new SaleDtoBuilder().Build(),
+                new SaleDtoBuilder().Build(),
                 new SaleDtoBuilder().Build()
             };
 
@@ -67,9 +48,35 @@ namespace Sales.Tests.Application.Handlers.Sales
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
+            result.Should().NotBeNull();
             result.Data.Should().HaveCount(salesDto.Count);
+            result.Data.Should().BeEquivalentTo(salesDto);
             result.Status.Should().Be(ResultResponseKind.Success);
             result.Message.Should().Be(string.Format(Consts.GetEntitiesWithSuccess, nameof(Sale)));
+            _saleRepositoryMock.Verify(x => x.GetAllAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldReturnSuccess_WhenNoSalesAreFound()
+        {
+            // Arrange
+            var query = new GetSalesQuery();
+
+            _saleRepositoryMock.Setup(x => x.GetAllAsync())
+                .ReturnsAsync([]);
+
+            _mapperMock.Setup(x => x.Map<IEnumerable<SaleDto>>(It.IsAny<IEnumerable<Sale>>()))
+                .Returns([]);
+
+            // Act
+            var result = await _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Data.Should().BeEmpty();
+            result.Status.Should().Be(ResultResponseKind.Success);
+            result.Message.Should().Be(string.Format(Consts.GetEntitiesWithSuccess, nameof(Sale)));
+            _saleRepositoryMock.Verify(x => x.GetAllAsync(), Times.Once);
         }
     }
 }

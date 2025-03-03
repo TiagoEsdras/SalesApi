@@ -3,8 +3,8 @@ using FluentAssertions;
 using Moq;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
-using Sales.Application.Queries.Products;
 using Sales.Application.Interfaces.Repositories;
+using Sales.Application.Queries.Products;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
 using Sales.Domain.Entities;
@@ -39,8 +39,10 @@ namespace Sales.Tests.Application.Handlers.Products
                 new ProductDtoBuilder().Build()
             };
 
-            _mockProductRepository.Setup(r => r.GetAllAsync()).ReturnsAsync([new Product()]);
-            _mockMapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>())).Returns(productsDto);
+            _mockProductRepository.Setup(r => r.GetAllAsync())
+                .ReturnsAsync([new Product()]);
+            _mockMapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>()))
+                .Returns(productsDto);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
@@ -48,6 +50,7 @@ namespace Sales.Tests.Application.Handlers.Products
             // Assert
             result.Should().NotBeNull();
             result.Status.Should().Be(ResultResponseKind.Success);
+            result.Data.Should().HaveCount(productsDto.Count);
             result.Data.Should().BeEquivalentTo(productsDto);
             result.Message.Should().Be(string.Format(Consts.GetEntitiesWithSuccess, nameof(Product)));
             _mockProductRepository.Verify(r => r.GetAllAsync(), Times.Once);
@@ -59,18 +62,18 @@ namespace Sales.Tests.Application.Handlers.Products
             // Arrange
             var query = new GetProductsQuery();
 
-            var emptyProductDtoList = new List<ProductDto>();
-
-            _mockProductRepository.Setup(r => r.GetAllAsync()).ReturnsAsync([]);
-            _mockMapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>())).Returns(emptyProductDtoList);
+            _mockProductRepository.Setup(r => r.GetAllAsync())
+                .ReturnsAsync([]);
+            _mockMapper.Setup(m => m.Map<IEnumerable<ProductDto>>(It.IsAny<IEnumerable<Product>>()))
+                .Returns([]);
 
             // Act
             var result = await _handler.Handle(query, CancellationToken.None);
 
             // Assert
             result.Should().NotBeNull();
+            result.Data.Should().BeEmpty();
             result.Status.Should().Be(ResultResponseKind.Success);
-            result.Data.Should().BeEquivalentTo(emptyProductDtoList);
             result.Message.Should().Be(string.Format(Consts.GetEntitiesWithSuccess, nameof(Product)));
             _mockProductRepository.Verify(r => r.GetAllAsync(), Times.Once);
         }

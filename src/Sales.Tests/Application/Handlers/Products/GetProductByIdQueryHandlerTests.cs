@@ -1,16 +1,17 @@
 ﻿using AutoMapper;
 using FluentAssertions;
+using FluentValidation;
 using Moq;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
-using Sales.Application.Queries.Products;
 using Sales.Application.Interfaces.Repositories;
+using Sales.Application.Queries.Products;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
+using Sales.Application.Validators.Products;
 using Sales.Domain.Entities;
 using Sales.Tests.Builders.DTOs;
 using Xunit;
-using FluentValidation;
 
 namespace Sales.Tests.Application.Handlers.Products
 {
@@ -19,18 +20,18 @@ namespace Sales.Tests.Application.Handlers.Products
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly Mock<IMapper> _mockMapper;
         private readonly GetProductByIdQueryHandler _handler;
-        private readonly Mock<IValidator<GetProductByIdQuery>> _validator;
+        private readonly GetProductByIdQueryValidator _validator;
 
         public GetProductByIdQueryHandlerTests()
         {
             _mockProductRepository = new Mock<IProductRepository>();
             _mockMapper = new Mock<IMapper>();
-            _validator = new Mock<IValidator<GetProductByIdQuery>>();
-            _handler = new GetProductByIdQueryHandler(_mockProductRepository.Object, _mockMapper.Object, _validator.Object);
+            _validator = new GetProductByIdQueryValidator();
+            _handler = new GetProductByIdQueryHandler(_mockProductRepository.Object, _mockMapper.Object, _validator);
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnProduct_WhenProductIsFound()
+        public async Task Handle_ShouldReturnSuccess_WhenProductIsFound()
         {
             // Arrange
             var query = new GetProductByIdQuery(Guid.NewGuid());
@@ -71,6 +72,20 @@ namespace Sales.Tests.Application.Handlers.Products
             result.ErrorMessage.Should().Be(string.Format(Consts.NotFoundEntity, nameof(Product)));
             result.ErrorDetail.Should().Be(string.Format(Consts.NotFoundEntityById, nameof(Product), query.Id));
             _mockProductRepository.Verify(r => r.GetByIdAsync(query.Id), Times.Once);
+        }
+
+        [Fact]
+        public async Task Handle_ShouldThrowException_WhenValidationFails()
+        {
+            // Arrange
+            var query = new GetProductByIdQuery(Guid.Empty);
+
+            // Act
+            Func<Task> act = () => _handler.Handle(query, CancellationToken.None);
+
+            // Assert
+            await act.Should().ThrowAsync<ValidationException>();
+            _mockProductRepository.Verify(r => r.GetByIdAsync(It.IsAny<Guid>()), Times.Never);
         }
     }
 }

@@ -31,7 +31,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         }
 
         [Fact]
-        public async Task Handle_ShouldReturnSaleDto_WhenSaleIsFound()
+        public async Task Handle_ShouldReturnSuccess_WhenSaleIsFound()
         {
             // Arrange
             var query = new GetSaleByIdQueryBuilder()
@@ -78,7 +78,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowValidationException_WhenValidationFails()
+        public async Task Handle_ShouldThrowException_WhenValidationFails()
         {
             // Arrange
             var query = new GetSaleByIdQueryBuilder()

@@ -63,6 +63,7 @@ namespace Sales.Tests.Application.Handlers.Products
         [Fact]
         public async Task Handle_ShouldThrowException_WhenValidationFails()
         {
+            // Arrange
             var command = new CreateProductCommandBuilder()
                .WithTitle("")
                .Build();

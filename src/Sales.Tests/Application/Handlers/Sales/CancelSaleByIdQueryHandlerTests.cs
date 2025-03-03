@@ -30,7 +30,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         }
 
         [Fact]
-        public async Task Handle_ShouldCancelSale_WhenSaleIsValid()
+        public async Task Handle_ShouldSuccess_WhenSaleIsCanceledSuccessfully()
         {
             // Arrange
             var sale = new SaleBuilder()
@@ -69,7 +69,9 @@ namespace Sales.Tests.Application.Handlers.Sales
             result.Data.Should().BeFalse();
             result.Status.Should().Be(ResultResponseKind.NotFound);
             result.ErrorType.Should().Be(ErrorType.DataNotFound);
+            result.ErrorMessage.Should().Be(string.Format(Consts.NotFoundEntity, nameof(Sale)));
             result.ErrorDetail.Should().Be(string.Format(Consts.NotFoundEntityById, nameof(Sale), query.Id));
+            _saleRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Sale>()), Times.Never);
         }
 
         [Fact]
@@ -93,11 +95,13 @@ namespace Sales.Tests.Application.Handlers.Sales
             result.Data.Should().BeFalse();
             result.Status.Should().Be(ResultResponseKind.BadRequest);
             result.ErrorType.Should().Be(ErrorType.InvalidOperation);
+            result.ErrorMessage.Should().Be(string.Format(Consts.OperationCannotBeProcessed, "Cancel Sale"));
             result.ErrorDetail.Should().Be(string.Format(Consts.SaleHasAlreadyBeenCancelled, query.Id));
+            _saleRepositoryMock.Verify(x => x.UpdateAsync(It.IsAny<Sale>()), Times.Never);
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowValidationException_WhenValidationFails()
+        public async Task Handle_ShouldThrowException_WhenValidationFails()
         {
             // Arrange
             var query = new CancelSaleByIdQueryBuilder()

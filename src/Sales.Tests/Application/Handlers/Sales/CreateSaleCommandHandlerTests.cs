@@ -37,7 +37,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         }
 
         [Fact]
-        public async Task Handle_ShouldCreateSale_WhenRequestIsValid()
+        public async Task Handle_ShouldReturnPersistedResult_WhenSaleIsCreatedSuccessfully()
         {
             // Arrange
             var saleItems = new List<SaleItemCommand>() {
@@ -70,6 +70,8 @@ namespace Sales.Tests.Application.Handlers.Sales
             result.Data.Should().BeEquivalentTo(saleDto);
             result.Status.Should().Be(ResultResponseKind.DataPersisted);
             result.Message.Should().Be(string.Format(Consts.EntityCreatedWithSuccess, nameof(Sale)));
+            _productRepositoryMock.Verify(r => r.GetByIdsAsync(It.IsAny<HashSet<Guid>>()), Times.Once);
+            _saleRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Sale>()), Times.Once);
         }
 
         [Fact]
@@ -97,11 +99,14 @@ namespace Sales.Tests.Application.Handlers.Sales
             result.Data.Should().BeNull();
             result.Status.Should().Be(ResultResponseKind.NotFound);
             result.ErrorType.Should().Be(ErrorType.DataNotFound);
+            result.ErrorMessage.Should().Be(string.Format(Consts.NotFoundEntity, nameof(Product)));
             result.ErrorDetail.Should().Contain(string.Join(", ", command.Items.Select(it => it.ProductId).Except(existingProductIds)));
+            _productRepositoryMock.Verify(r => r.GetByIdsAsync(It.IsAny<HashSet<Guid>>()), Times.Once);
+            _saleRepositoryMock.Verify(r => r.AddAsync(It.IsAny<Sale>()), Times.Never);
         }
 
         [Fact]
-        public async Task Handle_ShouldThrowValidationException_WhenValidationFails()
+        public async Task Handle_ShouldThrowException_WhenValidationFails()
         {
             // Arrange
             var command = new CreateSaleCommandBuilder().
