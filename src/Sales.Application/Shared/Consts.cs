@@ -10,6 +10,7 @@
         public const string NotFoundEntity = "{0} not found";
         public const string NotFoundEntityById = "{0} with Id {1} was not found";
         public const string SaleCanceledWithSuccess = "Sale with Id {0} was canceled with success";
+        public const string OperationCannotBeProcessed = "The operation {0} cannot be processed";
 
         #endregion Results Messages
 
@@ -21,6 +22,7 @@
         public const string FieldMustBeLowerOrEqualTo = "Field {0} must be lower or equal to {1}";
         public const string DuplicatedProductIds = "The following ProductId(s) is/are duplicated: {0}";
         public const string GuidCannotBeEmptyGuid = "Field {0} cannot be empty guid";
+        public const string SaleHasAlreadyBeenCancelled = "Sale with Id {0} has already been cancelled";
 
         #endregion Validations Messages
     }
