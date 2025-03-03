@@ -279,3 +279,5 @@ Thumbs.db
 #####
 /src/Gateway/Properties/launchSettings.Local.json
 /src/Gateway/ocelot.Local.json
+/src/SalesApi/appsettings.Local.json
+/src/SalesApi/Properties/launchSettings.Local.json
