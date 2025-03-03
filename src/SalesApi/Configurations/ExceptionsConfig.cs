@@ -7,6 +7,7 @@ namespace SalesApi.Configurations
         public static void AddExceptions(this IServiceCollection services)
         {
             services.AddExceptionHandler<ValidationExceptionHandler>();
+            services.AddExceptionHandler<GlobalExceptionHandler>();
         }
     }
 }

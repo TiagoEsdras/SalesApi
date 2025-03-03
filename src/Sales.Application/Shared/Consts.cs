@@ -25,5 +25,7 @@
         public const string SaleHasAlreadyBeenCancelled = "Sale with Id {0} has already been cancelled";
 
         #endregion Validations Messages
+
+        public const string SomeErrorOccurred = "Some error occurred";
     }
 }
