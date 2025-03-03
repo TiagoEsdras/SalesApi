@@ -1,0 +1,28 @@
+version: '3.3'
+
+services:
+  gateway:
+    container_name: ocelot-gateway
+    build:
+      context: ./src/Gateway
+    ports:
+      - "7777:80"
+    networks:
+      - evaluation-network
+    depends_on:
+      - sales-api
+
+  sales-api:
+    container_name: sales-api
+    build:
+      context: ./src/SalesApi
+    ports:
+      - "8081:80"
+    networks:
+      - evaluation-network
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+
+networks:
+  evaluation-network:
+    external: true
