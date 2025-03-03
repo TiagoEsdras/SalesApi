@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="ocelot.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Include="ocelot.json" />
+    <Content Remove="Properties\launchSettings.Local.json" />
   </ItemGroup>
 
   <ItemGroup>
