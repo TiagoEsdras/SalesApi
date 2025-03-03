@@ -30,6 +30,9 @@ namespace Sales.Application.Handlers.Sales
             if (sale is null)
                 return Result<bool>.NotFound(ErrorType.DataNotFound, string.Format(Consts.NotFoundEntity, nameof(Sale)), string.Format(Consts.NotFoundEntityById, nameof(Sale), request.Id));
 
+            if (sale.IsCanceled)
+                return Result<bool>.BadRequest(ErrorType.InvalidOperation, string.Format(Consts.OperationCannotBeProcessed, "Cancel Sale"), string.Format(Consts.SaleHasAlreadyBeenCancelled, request.Id));
+
             sale.Cancel();
             await _saleRepository.UpdateAsync(sale);
 
