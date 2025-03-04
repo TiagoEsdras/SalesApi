@@ -5,6 +5,7 @@ using Moq;
 using Sales.Application.Commands.Sales;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Sales;
+using Sales.Application.Interfaces.MessageBrokers;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
@@ -24,6 +25,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         private readonly Mock<IMapper> _mapperMock;
         private readonly CreateSaleCommandValidator _validator;
         private readonly Mock<IValidator<SaleItemCommand>> _commandValidator;
+        private readonly Mock<IRabbitMQMessageSender> _sender;
         private readonly CreateSaleCommandHandler _handler;
 
         public CreateSaleCommandHandlerTests()
@@ -33,7 +35,8 @@ namespace Sales.Tests.Application.Handlers.Sales
             _mapperMock = new Mock<IMapper>();
             _commandValidator = new Mock<IValidator<SaleItemCommand>>();
             _validator = new CreateSaleCommandValidator(_commandValidator.Object);
-            _handler = new CreateSaleCommandHandler(_productRepositoryMock.Object, _saleRepositoryMock.Object, _mapperMock.Object, _validator);
+            _sender = new Mock<IRabbitMQMessageSender>();
+            _handler = new CreateSaleCommandHandler(_productRepositoryMock.Object, _saleRepositoryMock.Object, _mapperMock.Object, _validator, _sender.Object);
         }
 
         [Fact]

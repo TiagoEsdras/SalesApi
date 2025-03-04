@@ -28,6 +28,8 @@ builder.Services.AddRepositories();
 builder.Services.AddValidators();
 builder.Services.AddExceptions();
 builder.Services.AddProblemDetails();
+builder.Services.AddMessageSender();
+builder.Services.AddRabbitMqConnection(builder.Configuration);
 
 var app = builder.Build();
 

@@ -26,10 +26,13 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Server=mysql-server;Database=SalesDb;User=root;Password=rootpassword;
+      - RabbitMq__HostName=rabbitmq
+      - RabbitMq__UserName=user
+      - RabbitMq__Password=password
+      - RabbitMq__Port=5672
     depends_on:
       - mysql-server
-    entrypoint: ["dotnet", "SalesApi.dll"]
-
+      - rabbitmq   
   mysql-server:
     container_name: mysql-server
     image: mysql:8.0
@@ -42,6 +45,18 @@ services:
       - evaluation-network
     volumes:
       - mysql_data:/var/lib/mysql
+  rabbitmq:
+    container_name: rabbitmq
+    hostname: hostname
+    image: rabbitmq:3-management
+    networks:
+    - evaluation-network
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
 
 networks:
   evaluation-network:

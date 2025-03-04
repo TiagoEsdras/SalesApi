@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using MediatR;
+using Sales.Application.Events;
+using Sales.Application.Interfaces.MessageBrokers;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Queries.Sales;
 using Sales.Application.Shared;
@@ -14,12 +16,14 @@ namespace Sales.Application.Handlers.Sales
         private readonly ISaleRepository _saleRepository;
         private readonly IMapper _mapper;
         private readonly IValidator<CancelSaleByIdQuery> _validator;
+        private readonly IRabbitMQMessageSender _rabbitMQMessageSender;
 
-        public CancelSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper, IValidator<CancelSaleByIdQuery> validator)
+        public CancelSaleByIdQueryHandler(ISaleRepository saleRepository, IMapper mapper, IValidator<CancelSaleByIdQuery> validator, IRabbitMQMessageSender rabbitMQMessageSender)
         {
             _saleRepository = saleRepository;
             _mapper = mapper;
             _validator = validator;
+            _rabbitMQMessageSender = rabbitMQMessageSender;
         }
 
         public async Task<Result<bool>> Handle(CancelSaleByIdQuery request, CancellationToken cancellationToken)
@@ -35,7 +39,7 @@ namespace Sales.Application.Handlers.Sales
 
             sale.Cancel();
             await _saleRepository.UpdateAsync(sale);
-
+            await _rabbitMQMessageSender.SendMessage(new SaleCancelledEvent(sale.Id), QueuesNames.CancelSaleQueue);
             return Result<bool>.Success(true, string.Format(Consts.SaleCanceledWithSuccess, request.Id));
         }
     }

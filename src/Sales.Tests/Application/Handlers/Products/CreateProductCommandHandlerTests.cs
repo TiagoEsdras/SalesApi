@@ -4,6 +4,7 @@ using FluentValidation;
 using Moq;
 using Sales.Application.DTOs;
 using Sales.Application.Handlers.Products;
+using Sales.Application.Interfaces.MessageBrokers;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
@@ -19,15 +20,18 @@ namespace Sales.Tests.Application.Handlers.Products
     {
         private readonly Mock<IProductRepository> _mockProductRepository;
         private readonly Mock<IMapper> _mockMapper;
+        private readonly Mock<IRabbitMQMessageSender> _sender;
         private readonly CreateProductCommandValidator _validator;
         private readonly CreateProductCommandHandler _handler;
+
 
         public CreateProductCommandHandlerTests()
         {
             _mockProductRepository = new Mock<IProductRepository>();
             _mockMapper = new Mock<IMapper>();
+            _sender = new Mock<IRabbitMQMessageSender>();
             _validator = new CreateProductCommandValidator();
-            _handler = new CreateProductCommandHandler(_mockProductRepository.Object, _mockMapper.Object, _validator);
+            _handler = new CreateProductCommandHandler(_mockProductRepository.Object, _mockMapper.Object, _validator, _sender.Object);
         }
 
         [Fact]

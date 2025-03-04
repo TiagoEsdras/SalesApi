@@ -3,6 +3,7 @@ using FluentAssertions;
 using FluentValidation;
 using Moq;
 using Sales.Application.Handlers.Sales;
+using Sales.Application.Interfaces.MessageBrokers;
 using Sales.Application.Interfaces.Repositories;
 using Sales.Application.Shared;
 using Sales.Application.Shared.Enum;
@@ -19,6 +20,7 @@ namespace Sales.Tests.Application.Handlers.Sales
         private readonly Mock<ISaleRepository> _saleRepositoryMock;
         private readonly Mock<IMapper> _mapperMock;
         private readonly CancelSaleByIdQueryValidator _validator;
+        private readonly Mock<IRabbitMQMessageSender> _sender;
         private readonly CancelSaleByIdQueryHandler _handler;
 
         public CancelSaleByIdQueryHandlerTests()
@@ -26,7 +28,8 @@ namespace Sales.Tests.Application.Handlers.Sales
             _saleRepositoryMock = new Mock<ISaleRepository>();
             _mapperMock = new Mock<IMapper>();
             _validator = new CancelSaleByIdQueryValidator();
-            _handler = new CancelSaleByIdQueryHandler(_saleRepositoryMock.Object, _mapperMock.Object, _validator);
+            _sender = new Mock<IRabbitMQMessageSender>();
+            _handler = new CancelSaleByIdQueryHandler(_saleRepositoryMock.Object, _mapperMock.Object, _validator, _sender.Object);
         }
 
         [Fact]
