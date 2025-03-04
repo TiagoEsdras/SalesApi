@@ -1,17 +1,23 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-COPY SalesApi.csproj ./
-RUN dotnet restore
+COPY src/SalesApi/SalesApi.csproj ./SalesApi/
+COPY src/Sales.Domain/Sales.Domain.csproj ./Sales.Domain/
+COPY src/Sales.Application/Sales.Application.csproj ./Sales.Application/
+COPY src/Sales.Infrastructure/Sales.Infrastructure.csproj ./Sales.Infrastructure/
 
-COPY . ./
-RUN dotnet publish -c Release -o /publish
+RUN dotnet restore ./SalesApi/SalesApi.csproj
+
+COPY src/ .
+
+RUN dotnet publish ./SalesApi/SalesApi.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-COPY --from=build /publish .
+COPY --from=build /app/publish .
 
+ENV ASPNETCORE_URLS=http://+:80
 EXPOSE 80
 
 ENTRYPOINT ["dotnet", "SalesApi.dll"]

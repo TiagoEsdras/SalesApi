@@ -1,28 +1,38 @@
 version: '3.3'
 
 services:
-  gateway:
-    container_name: ocelot-gateway
-    build:
-      context: ./src/Gateway
-    ports:
-      - "7777:80"
-    networks:
-      - evaluation-network
-    depends_on:
-      - sales-api
-
   sales-api:
     container_name: sales-api
-    build:
-      context: ./src/SalesApi
+    build:      
+      context: .
+      dockerfile: ./src/SalesApi/Dockerfile
     ports:
       - "8081:80"
     networks:
       - evaluation-network
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=mysql-server;Database=SalesDb;User=root;Password=rootpassword;
+    depends_on:
+      - mysql-server
+    entrypoint: ["dotnet", "SalesApi.dll"]
+
+  mysql-server:
+    container_name: mysql-server
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: SalesDb
+    ports:
+      - "3307:3306"
+    networks:
+      - evaluation-network
+    volumes:
+      - mysql_data:/var/lib/mysql
 
 networks:
   evaluation-network:
     external: true
+
+volumes:
+  mysql_data:
