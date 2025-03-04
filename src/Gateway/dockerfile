@@ -1,17 +1,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
+WORKDIR /src
 
-COPY ./Gateway/*.csproj ./Gateway/
+RUN dotnet nuget locals all --clear
+COPY src/Gateway/Gateway.csproj ./Gateway/
+
 RUN dotnet restore ./Gateway/Gateway.csproj
 
-COPY ./Gateway/. ./Gateway/
-WORKDIR /app/Gateway
-RUN dotnet publish -c Release -o /out
+COPY src/ .
+RUN dotnet publish ./Gateway/Gateway.csproj -c Release -o /app/publish
 
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /out ./
 
-EXPOSE 7777
+COPY --from=build /app/publish .
+
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
 
 ENTRYPOINT ["dotnet", "Gateway.dll"]
