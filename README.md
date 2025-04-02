@@ -30,24 +30,38 @@ Before running the application, ensure you have the following installed:
 - **Docker**: Required for containerized deployment ([Download Docker](https://www.docker.com/get-started)).
 - **.NET 8 SDK** (optional for local development outside of Docker).
 
-### Steps to Run
+---
 
-1. **Clone the repository**:
+### **Steps to Run** 🚀  
+
+1. **Clone the repository**:  
    ```bash
    git clone https://github.com/TiagoEsdras/SalesApi.git
    ```
 
-2. **Navigate to the project directory**:
+2. **Navigate to the project directory**:  
    ```bash
    cd SalesApi
    ```
-
-3. **Build and start the application** using Docker:
+3. **Ensure the external Docker network exists**:  
+   The application requires the `evaluation-network` Docker network. Check if it already exists:  
+   ```bash
+   docker network ls
+   ```  
+   If **it does not exist**, create it manually:  
+   ```bash
+   docker network create evaluation-network
+   ```
+4. **Build and start the application** using Docker:  
    ```bash
    docker-compose up --build
-   ```
+   ```  
 
-4. **Wait for the services to initialize**. The following services will be available:
+Once the containers are up and running, your application will be ready to use! 🚀🔥
+
+Agora a aplicação estará rodando e pronta para uso! 🚀🔥
+
+5. **Wait for the services to initialize**. The following services will be available:
    - **Sales API**: [http://localhost:8081](http://localhost:8081)
    - **API Gateway**: [http://localhost:7777](http://localhost:7777)
    - **Database (MySQL)**: Available at `localhost:3307`
