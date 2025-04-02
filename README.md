@@ -142,7 +142,6 @@ Use **Postman** or **Swagger UI** to interact with the API.
 ### Test Coverage
 - **Handlers**: Ensures MediatR handlers function as expected.
 - **Validators**: Confirms request models meet business rules.
-- **Repositories**: Verifies database interactions.
 
 Run tests with:
 ```bash
