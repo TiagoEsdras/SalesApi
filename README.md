@@ -146,6 +146,7 @@ Use **Postman** or **Swagger UI** to interact with the API.
 
 Run tests with:
 ```bash
+   cd src
    dotnet test
 ```
 
